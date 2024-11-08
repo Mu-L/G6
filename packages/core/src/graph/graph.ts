@@ -1573,8 +1573,10 @@ export default abstract class AbstractGraph extends EventEmitter implements IAbs
     const self = this;
     let item: INode;
     const itemMap: NodeMap = this.get('itemMap');
+    const itemsArray = items[`${type}s`];
+    const itemsToAdd: { type: ITEM_TYPE; model: NodeConfig | EdgeConfig }[] = [];
 
-    each(models, model => {
+    each(models, (model: NodeConfig | EdgeConfig) => {
       item = itemMap[model.id];
       if (item) {
         if (self.get('animate') && type === NODE) {
@@ -1588,10 +1590,23 @@ export default abstract class AbstractGraph extends EventEmitter implements IAbs
 
         self.updateItem(item, model, false);
       } else {
-        item = self.addItem(type, model, false) as any;
+        itemsToAdd.push({ type, model });
       }
-      if (item) (items as { [key: string]: any[] })[`${type}s`].push(item);
+
+      if (item) {
+        itemsArray.push(item);
+      }
     });
+
+    if (itemsToAdd.length) {
+      const items = self.addItems(itemsToAdd, false);
+      for (var i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item) {
+          itemsArray.push(item);
+        }
+      }
+    }
   }
 
   /**
@@ -2718,8 +2733,8 @@ export default abstract class AbstractGraph extends EventEmitter implements IAbs
     edges.forEach(edge => {
       const { isVEdge, size = 1 } = edge.getModel();
       if (edge.isVisible() && !isVEdge) return;
-      let source = edge.getSource();
-      let target = edge.getTarget();
+      const source = edge.getSource();
+      const target = edge.getTarget();
       let otherEnd = null;
       let otherEndIsSource;
       if (source.getModel().id === comboModel.id ||
@@ -2766,6 +2781,12 @@ export default abstract class AbstractGraph extends EventEmitter implements IAbs
         if (addedVEdgeMap[key]) {
           addedVEdgeMap[key].size += size;
           return;
+        } else {
+          const inverseKey = `${vEdgeInfo.target}-${vEdgeInfo.source}`;
+          if (addedVEdgeMap[inverseKey]) {
+            addedVEdgeMap[inverseKey].size += size;
+            return;
+          }
         }
         addedVEdgeMap[key] = vEdgeInfo;
       }
@@ -2827,10 +2848,10 @@ export default abstract class AbstractGraph extends EventEmitter implements IAbs
     const addedVEdgeMap = {};
     edges.forEach(edge => {
       if (edge.isVisible() && !edge.getModel().isVEdge) return;
-      let source = edge.getSource();
-      let target = edge.getTarget();
-      let sourceId = source.get('id');
-      let targetId = target.get('id');
+      const source = edge.getSource();
+      const target = edge.getTarget();
+      const sourceId = source.get('id');
+      const targetId = target.get('id');
       let otherEnd = null;
       let otherEndIsSource;
       if (sourceId === comboModel.id ||

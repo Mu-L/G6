@@ -54,14 +54,15 @@ export default {
       graph.on(event, handler);
     });
     // To avoid the tabs switching makes the keydown related behaviors disable
-    document.addEventListener('visibilitychange', () => {
+    this.handleVisibilityChange = () => {
       this.keydown = false;
-    });
+    };
+    document.addEventListener('visibilitychange', this.handleVisibilityChange);
   },
 
   unbind(graph: IAbstractGraph) {
     const { events } = this;
-    let draggable = graph.get('canvas').get('draggable');
+    const draggable = graph.get('canvas').get('draggable');
     if (
       this.type === 'drag-canvas' ||
       this.type === 'brush-select' ||
@@ -73,6 +74,7 @@ export default {
       graph.off(event, handler);
     });
     graph.get('canvas').set('draggable', draggable);
+    document.removeEventListener('visibilitychange', this.handleVisibilityChange);
   },
 
   get(val: string) {

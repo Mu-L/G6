@@ -50,8 +50,9 @@ export default defineConfig({
     description: 'A collection of charts made with the Grammar of Graphics',
     defaultLanguage: 'zh', // 默认语言
     isAntVSite: false, // 是否是 AntV 的大官网
-    siteUrl: 'https://antv.antgroup.com', // 官网地址
+    siteUrl: 'https://g6-v4.antv.vision', // 官网地址
     githubUrl: repository.url, // GitHub 地址
+    footerTheme: 'light', // 白色 底部主题
     showSearch: true, // 是否显示搜索框
     showGithubCorner: true, // 是否显示头部的 GitHub icon
     showGithubStars: true, // 是否显示 GitHub star 数量
@@ -63,7 +64,8 @@ export default defineConfig({
     themeSwitcher: 'g2',
     versions: {
       // 历史版本以及切换下拉菜单
-      [version]: 'https://g6.antv.antgroup.com',
+      [version]: 'https://g6-v4.antv.vision/',
+      '5.x': 'https://g6.antv.antgroup.com/',
       '3.2.x': 'https://g6-v3-2.antv.vision',
     },
     docsearchOptions: {
@@ -418,7 +420,10 @@ export default defineConfig({
       splitPaneMainSize: '62%',
     },
     playground: {
-      extraLib: getExtraLib(),
+      // extraLib: getExtraLib(),
+      dependencies: {
+        "@antv/g6": "^4.8.24"
+      }
     },
     announcement: {
       zh: '',
@@ -426,23 +431,30 @@ export default defineConfig({
     },
     /** 首页技术栈介绍 */
     detail: {
+      engine: {
+        zh: 'G6',
+        en: 'G6',
+      },
       title: {
-        zh: 'G6 图可视化引擎',
-        en: 'G6 Graph Visualization Engine',
+        zh: 'G6·图可视化引擎',
+        en: 'G6·Graph Visualization Engine',
       },
       description: {
         zh: 'G6 是一个简单、易用、完备的图可视化引擎，它在高定制能力的基础上，提供了一系列设计优雅、便于使用的图可视化解决方案。能帮助开发者搭建属于自己的图可视化、图分析、或图编辑器应用。',
         en: 'G6 is graph visualization engine with simplicity and convenience. Based on the ability of customize, it provides a set of elegant graph visualization solutions, and helps developers to build up applications for graph visualization, graph analysis, and graph editor.',
       },
       image:
-        'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*j5AqSpmNPdYAAAAAAAAAAABkARQnAQ',
+        'https://mdn.alipayobjects.com/huamei_qa8qxu/afts/img/A*6dSUSo3QTk0AAAAAAAAAAAAADmJ7AQ/original',
+      imageStyle: {
+        transform: 'scale(0.6)',
+      },
       buttons: [
         {
           text: {
-            zh: 'V5 DEMO',
-            en: 'V5 DEMO',
+            zh: '最新版本',
+            en: 'Latest Version',
           },
-          link: `/g6v5`,
+          link: `https://g6.antv.antgroup.com/`,
         },
         {
           text: {
@@ -461,33 +473,6 @@ export default defineConfig({
         },
       ],
     },
-    /** 新闻公告，优先选择配置的，如果没有配置则使用远程的！ */
-    news: [
-      {
-        type: {
-          zh: '推荐',
-          en: 'News',
-        },
-        title: {
-          zh: 'G6 5.0-beta 闪亮登场',
-          en: 'G6 5.0-beta is released!',
-        },
-        date: '2023.08.31',
-        link: 'https://zhuanlan.zhihu.com/p/653709725?',
-      },
-      {
-        type: {
-          zh: '推荐',
-          en: 'News',
-        },
-        title: {
-          zh: '图可视分析与搭建平台 GraphInsight 开源',
-          en: 'GraphInsight is opened source!',
-        },
-        date: '2022.11.22',
-        link: 'https://www.yuque.com/antv/blog/nyl5bkhdkicgm7v8',
-      },
-    ],
     /** 首页特性介绍 */
     features: [
       {
@@ -619,12 +604,12 @@ export default defineConfig({
       },
     ],
     internalSite: {
-      url: 'https://g6.antv.antgroup.com',
+      url: 'https://g6-v4.antv.vision',
       name: {
         zh: '极速站点',
         en: 'Fast Site',
       },
-    },
+    }
   },
   mfsu: false,
   analytics: {
